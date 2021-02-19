@@ -6,10 +6,11 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import Loading from "./Loading";
 import "./Restaurant.css";
 
-function Restaurant(props) {
+function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+
   useEffect(() => {
     fetch(`https://web422-a1-francesco.herokuapp.com/api/restaurants/${id}`)
       .then((res) => {

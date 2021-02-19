@@ -3,9 +3,8 @@ import { Card, Table, Pagination } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
-import Loading from "./Loading";
-
 import "./Restaurants.css";
+import Loading from "./Loading";
 
 function Restaurants(props) {
   const [restaurant, setRestaurant] = useState(null);
@@ -18,14 +17,16 @@ function Restaurants(props) {
   let borough = query.borough;
 
   if (borough) {
-    const capitaliseWords = (str) => {
+    // change text to lowercase with first letter of each word uppercase
+    // to be able to match the borough from the MongoDB Restaurants database.
+    function capitalizeWords(str) {
       const strArr = str.toLowerCase().split(" ");
       const newArr = strArr.map((word) => {
         return word[0].toUpperCase() + word.substr(1, word.length);
       });
       return newArr.join(" ");
-    };
-    borough = capitaliseWords(borough);
+    }
+    borough = capitalizeWords(borough);
   }
 
   const apiUrl = "https://web422-a1-francesco.herokuapp.com/api";
@@ -46,7 +47,7 @@ function Restaurants(props) {
       .finally(() => {
         setLoading(false);
       });
-  }, [page, query.borough]);
+  }, [borough, page, query.borough, url]);
 
   if (loading) {
     return <Loading />;

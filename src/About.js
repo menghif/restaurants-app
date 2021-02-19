@@ -7,11 +7,20 @@ function About() {
       <Card.Body>
         <Card.Title>About</Card.Title>
         <Card.Text className="about-text">
-          Hi, my name is Francesco, I am currently studying computer programming
-          at Seneca College.
+          Ciao! My name is Francesco Menghi, I'm currently studying computer
+          programming at Seneca College. I have been learning new web
+          programming tools and frameworks such as React and I am very excited
+          to continue to build upon this knowledge.
           <br />
-          You can find the code for this project on my{" "}
-          <a target="_blank" rel="noreferrer" href="https://github.com/menghif">
+          <br />
+          Please let me know what I can do to improve this app!
+          <br />
+          You can find the code for it on my{" "}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/menghif/restaurants-app"
+          >
             Github
           </a>
           .
