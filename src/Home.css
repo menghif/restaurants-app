@@ -1,0 +1,15 @@
+.new-york-background {
+  /* Image by Oliver Niblett from Unsplash: https://unsplash.com/photos/wh-7GeXxItI */
+  background: url("./oliver-niblett-wh-7GeXxItI-unsplash.jpg") center;
+  background-size: cover;
+  width: 100%;
+  height: 250%;
+  text-align: center;
+  color: grey;
+  border-radius: 8px;
+}
+
+.new-york-background h1 {
+  padding-bottom: 5px;
+  border-bottom-style: double;
+}

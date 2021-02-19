@@ -1,0 +1,17 @@
+.title-card {
+  font-size: 1.7em;
+}
+
+.leaflet-map {
+  border-radius: 5px;
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .grade-cards {
+    flex-direction: column;
+  }
+
+  .grade-card {
+    margin-top: 15px;
+  }
+}
