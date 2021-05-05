@@ -32,6 +32,11 @@ function Restaurants(props) {
   const apiUrl = "https://web422-a1-francesco.herokuapp.com/api";
   const url = `${apiUrl}/restaurants?page=${page}&perPage=${perPage}`;
 
+  // reset page to 1 when searching for borough
+  useEffect(() => {
+    setPage(1);
+  }, [borough]);
+
   useEffect(() => {
     fetch(!borough ? url : `${url}&borough=${borough}`)
       .then((res) => {
@@ -47,7 +52,7 @@ function Restaurants(props) {
       .finally(() => {
         setLoading(false);
       });
-  }, [borough, page, query.borough, url]);
+  }, [borough, page, url]);
 
   if (loading) {
     return <Loading />;
