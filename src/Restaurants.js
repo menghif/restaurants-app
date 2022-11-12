@@ -29,7 +29,7 @@ function Restaurants(props) {
     borough = capitalizeWords(borough);
   }
 
-  const apiUrl = "https://web422-a1-francesco.herokuapp.com/api";
+  const apiUrl = "https://restaurants-api.onrender.com/api";
   const url = `${apiUrl}/restaurants?page=${page}&perPage=${perPage}`;
 
   // reset page to 1 when searching for borough
