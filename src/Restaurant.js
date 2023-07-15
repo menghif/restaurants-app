@@ -12,17 +12,30 @@ function Restaurant() {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
-  const fetchData = async () => {
+  const fetchData = async (id) => {
     const data = JSON.stringify({
       collection: "restaurants",
       database: "sample_restaurants",
       dataSource: "Sandbox",
       filter: {
-        _id: { $oid: "5eb3d668b31de5d588f4296c" },
+        _id: { $oid: id },
       },
       projection: {
         _id: 1,
-        borough: 2,
+        name: 2,
+        borough: 3,
+        cuisine: 4,
+        address: {
+          building: 5,
+          coord: 6,
+          street: 7,
+          zipcode: 8,
+        },
+        grades: {
+          date: 9,
+          grade: 10,
+          score: 11,
+        },
       },
     });
 
@@ -39,35 +52,16 @@ function Restaurant() {
     };
 
     try {
-      const response = await axios(config);
-      console.log(response.data);
+      const res = await axios(config);
+      setRestaurant(res.data.documents[0]);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetch(`https://web422-a1-francesco.herokuapp.com/api/restaurants/${id}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.hasOwnProperty("_id")) {
-          setRestaurant(data);
-        } else {
-          setRestaurant(null);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    fetchData(id);
   }, [id]);
 
   if (loading) {
@@ -104,8 +98,8 @@ function Restaurant() {
         className="leaflet-map"
         style={{ height: "400px" }}
         center={[coord1, coord0]}
-        zoom={13}
-        scrollWheelZoom={false}
+        zoom={15}
+        scrollWheelZoom={true}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={[coord1, coord0]}></Marker>{" "}
