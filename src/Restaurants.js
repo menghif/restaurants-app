@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Table, Pagination } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import queryString from "query-string";
+import axios from "axios";
 
 import "./Restaurants.css";
 import Loading from "./Loading";
@@ -53,6 +54,43 @@ function Restaurants(props) {
         setLoading(false);
       });
   }, [borough, page, url]);
+
+  const fetchData = async (skip) => {
+    const data = JSON.stringify({
+      collection: "restaurants",
+      database: "sample_restaurants",
+      dataSource: "Sandbox",
+      projection: {
+        _id: 1,
+        name: 2,
+      },
+      limit: 10,
+      skip: skip, // skip number of objects for pagination
+    });
+
+    const config = {
+      method: "post",
+      url: "https://data.mongodb-api.com/app/data-bnuag/endpoint/data/v1/action/find",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key":
+          "UilfcgvaDKIn04CCbmTpqHaTHNwAXfFJFbH01HAklc75D5Lp7T4G4Qa0IiO1TKnw",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios(config);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(20);
+  }, []);
 
   if (loading) {
     return <Loading />;

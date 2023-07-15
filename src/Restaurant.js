@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardDeck } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import axios from "axios";
 
 import Loading from "./Loading";
 import "./Restaurant.css";
@@ -10,6 +11,44 @@ function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+
+  const fetchData = async () => {
+    const data = JSON.stringify({
+      collection: "restaurants",
+      database: "sample_restaurants",
+      dataSource: "Sandbox",
+      filter: {
+        _id: { $oid: "5eb3d668b31de5d588f4296c" },
+      },
+      projection: {
+        _id: 1,
+        borough: 2,
+      },
+    });
+
+    const config = {
+      method: "post",
+      url: "https://data.mongodb-api.com/app/data-bnuag/endpoint/data/v1/action/find",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key":
+          "UilfcgvaDKIn04CCbmTpqHaTHNwAXfFJFbH01HAklc75D5Lp7T4G4Qa0IiO1TKnw",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios(config);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     fetch(`https://web422-a1-francesco.herokuapp.com/api/restaurants/${id}`)
