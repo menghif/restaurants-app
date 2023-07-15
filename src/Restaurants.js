@@ -8,8 +8,8 @@ import "./Restaurants.css";
 import Loading from "./Loading";
 
 function Restaurants(props) {
-  const [restaurant, setRestaurant] = useState(null);
-  const [page, setPage] = useState(1);
+  const [restaurants, setRestaurants] = useState([]);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const perPage = 10;
   let history = useHistory();
@@ -30,32 +30,12 @@ function Restaurants(props) {
     borough = capitalizeWords(borough);
   }
 
-  const apiUrl = "https://restaurants-api.onrender.com/api";
-  const url = `${apiUrl}/restaurants?page=${page}&perPage=${perPage}`;
-
-  // reset page to 1 when searching for borough
+  // reset page to 0 when searching for borough
   useEffect(() => {
-    setPage(1);
+    setPage(0);
   }, [borough]);
 
-  useEffect(() => {
-    fetch(!borough ? url : `${url}&borough=${borough}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Unable to get Restaurants from the API");
-        }
-        return res.json();
-      })
-      .then((result) => {
-        setRestaurant(result);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [borough, page, url]);
-
-  const fetchData = async (skip) => {
+  const fetchData = async (page, borough) => {
     const data = JSON.stringify({
       collection: "restaurants",
       database: "sample_restaurants",
@@ -63,9 +43,16 @@ function Restaurants(props) {
       projection: {
         _id: 1,
         name: 2,
+        borough: 3,
+        cuisine: 4,
+        address: 5,
+        grades: 6,
       },
-      limit: 10,
-      skip: skip, // skip number of objects for pagination
+      filter: {
+        borough: borough,
+      },
+      limit: perPage,
+      skip: page, // skip number of objects for pagination
     });
 
     const config = {
@@ -81,26 +68,29 @@ function Restaurants(props) {
     };
 
     try {
-      const response = await axios(config);
-      console.log(response.data);
+      const res = await axios(config);
+      console.log(res.data.documents);
+
+      setRestaurants(res.data.documents);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchData(20);
-  }, []);
+    fetchData(page * perPage, borough);
+  }, [page, borough]);
 
   if (loading) {
     return <Loading />;
   }
 
-  if (!restaurant) {
+  if (!restaurants) {
     return null;
   }
 
-  if (restaurant.length === 0) {
+  if (restaurants.length === 0) {
     return (
       <Card bg="light" text="dark">
         <Card.Body>
@@ -112,7 +102,7 @@ function Restaurants(props) {
   }
 
   function previousPage() {
-    if (page > 1) {
+    if (page > 0) {
       setPage(page - 1);
     }
   }
@@ -141,7 +131,7 @@ function Restaurants(props) {
           </tr>
         </thead>
         <tbody>
-          {restaurant.map((restaurant) => (
+          {restaurants.map((restaurant) => (
             <tr
               key={restaurant._id}
               onClick={() => {
@@ -159,8 +149,8 @@ function Restaurants(props) {
         </tbody>
       </Table>
       <Pagination>
-        <Pagination.Prev onClick={previousPage} />
-        <Pagination.Item>{page}</Pagination.Item>
+        {page > 0 && <Pagination.Prev onClick={previousPage} />}
+        <Pagination.Item>{page + 1}</Pagination.Item>
         <Pagination.Next onClick={nextPage} />
       </Pagination>
     </div>
