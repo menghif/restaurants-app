@@ -1,15 +1,15 @@
 {
-  "name": "my-app",
+  "name": "restaurant-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "axios": "^1.4.0",
     "bootstrap": "^4.6.0",
     "leaflet": "^1.7.1",
-    "mongodb": "^5.7.0",
     "query-string": "^6.13.8",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -17,8 +17,7 @@
     "react-leaflet": "^3.1.0",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^1.1.0"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
