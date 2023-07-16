@@ -11,8 +11,9 @@ function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const apiKey = process.env.REACT_APP_MONGODB_CONN_STRING;
 
-  const fetchData = async (id) => {
+  const fetchData = async (id, apiKey) => {
     const data = JSON.stringify({
       collection: "restaurants",
       database: "sample_restaurants",
@@ -45,8 +46,7 @@ function Restaurant() {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Request-Headers": "*",
-        "api-key":
-          "UilfcgvaDKIn04CCbmTpqHaTHNwAXfFJFbH01HAklc75D5Lp7T4G4Qa0IiO1TKnw",
+        "api-key": apiKey,
       },
       data: data,
     };
@@ -61,8 +61,8 @@ function Restaurant() {
   };
 
   useEffect(() => {
-    fetchData(id);
-  }, [id]);
+    fetchData(id, apiKey);
+  }, [id, apiKey]);
 
   if (loading) {
     return <Loading />;

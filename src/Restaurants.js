@@ -12,8 +12,9 @@ function Restaurants(props) {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const perPage = 10;
-  let history = useHistory();
+  const apiKey = process.env.REACT_APP_MONGODB_CONN_STRING;
 
+  let history = useHistory();
   let query = queryString.parse(props.query);
   let borough = query.borough;
 
@@ -35,7 +36,7 @@ function Restaurants(props) {
     setPage(0);
   }, [borough]);
 
-  const fetchData = async (page, borough) => {
+  const fetchData = async (page, borough, apiKey) => {
     const data = JSON.stringify({
       collection: "restaurants",
       database: "sample_restaurants",
@@ -61,8 +62,7 @@ function Restaurants(props) {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Request-Headers": "*",
-        "api-key":
-          "UilfcgvaDKIn04CCbmTpqHaTHNwAXfFJFbH01HAklc75D5Lp7T4G4Qa0IiO1TKnw",
+        "api-key": apiKey,
       },
       data: data,
     };
@@ -79,8 +79,8 @@ function Restaurants(props) {
   };
 
   useEffect(() => {
-    fetchData(page * perPage, borough);
-  }, [page, borough]);
+    fetchData(page * perPage, borough, apiKey);
+  }, [page, borough, apiKey]);
 
   if (loading) {
     return <Loading />;
