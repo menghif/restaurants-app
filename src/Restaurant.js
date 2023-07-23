@@ -45,7 +45,6 @@ function Restaurant() {
       url: "https://data.mongodb-api.com/app/data-bnuag/endpoint/data/v1/action/find",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Request-Headers": "*",
         "api-key": apiKey,
       },
       data: data,
