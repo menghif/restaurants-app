@@ -68,8 +68,6 @@ function Restaurants(props) {
 
     try {
       const res = await axios(config);
-      console.log(res.data.documents);
-
       setRestaurants(res.data.documents);
       setLoading(false);
     } catch (error) {
