@@ -12,7 +12,7 @@ function Restaurants(props) {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const perPage = 10;
-  const apiKey = process.env.REACT_APP_MONGODB_CONN_STRING;
+  const apiKey = process.env.DATA_API_KEY;
 
   let history = useHistory();
   let query = queryString.parse(props.query);

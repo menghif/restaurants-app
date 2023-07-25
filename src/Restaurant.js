@@ -11,7 +11,7 @@ function Restaurant() {
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  const apiKey = process.env.REACT_APP_MONGODB_CONN_STRING;
+  const apiKey = process.env.DATA_API_KEY;
 
   const fetchData = async (id, apiKey) => {
     const data = JSON.stringify({
