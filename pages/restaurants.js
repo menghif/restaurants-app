@@ -1,6 +1,9 @@
 import clientPromise from "../lib/mongodb";
 import DashboardLayout from "./layout";
 
+// add bootstrap css
+import "bootstrap/dist/css/bootstrap.css";
+
 export default function Restaurants({ restaurants }) {
   return (
     <div>
