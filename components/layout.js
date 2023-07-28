@@ -8,12 +8,11 @@ import {
   Navbar,
   Row,
 } from "react-bootstrap";
+import { useRouter } from "next/router";
 
 import { useState } from "react";
 
-export default function DashboardLayout({
-  children, // will be a page or nested layout
-}) {
+export default function Layout({ children }) {
   const [searchString, setSearchString] = useState("");
   const [activeKey, setActiveKey] = useState("/");
 
@@ -22,8 +21,13 @@ export default function DashboardLayout({
     setSearchString("");
   }
 
+  function isActive(href) {
+    const { pathname } = useRouter();
+    return pathname === href;
+  }
+
   return (
-    <section>
+    <div>
       {/* Include shared UI here e.g. a header or sidebar */}
       <Navbar bg="secondary" variant="dark" expand="lg">
         <Container>
@@ -36,14 +40,14 @@ export default function DashboardLayout({
             activeKey={activeKey}
             onSelect={(selectedKey) => setActiveKey(selectedKey)}
           >
-            <Nav.Link href="/restaurants">
+            <Nav.Link href="/restaurants" active={isActive("/restaurants")}>
               <h2>Full List</h2>
             </Nav.Link>
-            <Nav.Link href="/about">
+            <Nav.Link href="/about" active={isActive("/about")}>
               <h2>About</h2>
             </Nav.Link>
           </Nav>
-          <Form onSubmit={handleSubmit} inline className="search-box">
+          <Form onSubmit={handleSubmit} className="search-box">
             <FormControl
               type="text"
               placeholder="Borough"
@@ -57,13 +61,24 @@ export default function DashboardLayout({
           </Form>
         </Navbar.Collapse>
       </Navbar>
-      <Container>
-        <Row>
-          <Col></Col>
-        </Row>
-      </Container>
 
       {children}
-    </section>
+
+      <footer>
+        <Container>
+          <Row>
+            <Col>
+              <p>test1</p>
+            </Col>
+            <Col>
+              <p>test2</p>
+            </Col>
+            <Col>
+              <p>test3</p>
+            </Col>
+          </Row>
+        </Container>
+      </footer>
+    </div>
   );
 }
