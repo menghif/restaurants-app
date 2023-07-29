@@ -1,51 +1,35 @@
 // import clientPromise from "../lib/mongodb";
 
+import useSWR from 'swr';
 
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { Card, Table, Pagination } from "react-bootstrap";
 // import { useHistory } from "react-router-dom";
 // import queryString from "query-string";
-// import axios from "axios";
-// import Loading from "./Loading";
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export async function getServerSideProps() {
-  try {
-    let response = await fetch('http://localhost:3000/api/restaurants');
-    let restaurants = await response.json();
-
-    return {
-      props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
-    };
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-  export default function Restaurants({ restaurants }) {
-    const [page, setPage] = useState(0);
-    const router = useRouter();
-
-    // const [loading, setLoading] = useState(true);
-    const perPage = 20;
-
-    const refreshData = () => {
-      router.replace(router.asPath);
-    }
+  export default function Restaurants() {
+    const [page, setPage] = useState(1);
 
     function previousPage() {
-      if (page > 0) {
-        setPage(page - 1);
-        refreshData();
-      }
+      setPage(page - 1);      
     }
   
     function nextPage() {
       setPage(page + 1);
-      refreshData();
     }
   
+    const { data:restaurants, error, isLoading } = useSWR(`/api/restaurants?page=${page}`, fetcher);
+
+    if (error) {
+      console.error(error);
+      return <div>FAILED TO LOAD</div>;
+    }
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div>
@@ -80,8 +64,8 @@ export async function getServerSideProps() {
           </tbody>
         </Table>
         <Pagination>
-          {page > 0 && <Pagination.Prev onClick={previousPage} />}
-          <Pagination.Item>{page + 1}</Pagination.Item>
+          {page > 1 && <Pagination.Prev onClick={previousPage} />}
+          <Pagination.Item>{page}</Pagination.Item>
           <Pagination.Next onClick={nextPage} />
         </Pagination>
       </div>
