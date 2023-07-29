@@ -1,17 +1,15 @@
-// import clientPromise from "../lib/mongodb";
-
 import useSWR from 'swr';
 
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { Card, Table, Pagination } from "react-bootstrap";
-// import { useHistory } from "react-router-dom";
-// import queryString from "query-string";
+import { useRouter } from "next/router";
+
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
   export default function Restaurants() {
     const [page, setPage] = useState(1);
+    const router = useRouter();
 
     function previousPage() {
       setPage(page - 1);      
@@ -21,6 +19,10 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
       setPage(page + 1);
     }
   
+    const handleRedirect = (id) => () => {
+      router.push(`/restaurant?id=${id}`);
+    }
+
     const { data:restaurants, error, isLoading } = useSWR(`/api/restaurants?page=${page}`, fetcher);
 
     if (error) {
@@ -52,7 +54,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
           </thead>
           <tbody>
             {restaurants.map((restaurant) => (
-              <tr key={restaurant._id}>
+              <tr key={restaurant._id} onClick={handleRedirect(restaurant.restaurant_id)}>
                 <td>{restaurant.name}</td>
                 <td>
                   {restaurant.address.building} {restaurant.address.street}
