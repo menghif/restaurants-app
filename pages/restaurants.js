@@ -1,5 +1,6 @@
-import clientPromise from "../lib/mongodb";
+// import clientPromise from "../lib/mongodb";
 
+import useSWR from 'swr';
 
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -9,31 +10,38 @@ import { Card, Table, Pagination } from "react-bootstrap";
 // import axios from "axios";
 // import Loading from "./Loading";
 
-export async function getServerSideProps(context) {
-  try {
-    const page = context.query.page;
-    const client = await clientPromise;
-    const db = client.db("sample_restaurants");
-    
-    const restaurants = await db
-      .collection("restaurants")
-      .find({})
-      .limit(20)
-      .skip(parseInt(page, 10))
-      .toArray();
-      
-      return {
-        props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
-      };
-    } catch (e) {
-      console.error(e);
-      return {
-        props: { restaurants: [] }
-      };
-    }
-  }
 
-  export default function Restaurants({ restaurants }) {
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
+
+// export async function getServerSideProps(context) {
+//   try {
+//     const page = context.query.page;
+//     const client = await clientPromise;
+//     const db = client.db("sample_restaurants");
+
+//     const restaurants = await db
+//       .collection("restaurants")
+//       .find({})
+//       .limit(20)
+//       .skip(parseInt(page, 10))
+//       .toArray();
+
+//       return {
+//         props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
+//       };
+//     } catch (e) {
+//       console.error(e);
+//       return {
+//         props: { restaurants: [] }
+//       };
+//     }
+//   }
+
+  export default function Restaurants() {
     const [page, setPage] = useState(0);
     const router = useRouter();
 
@@ -56,6 +64,14 @@ export async function getServerSideProps(context) {
       refreshData();
     }
   
+    const { data: restaurants, error } = useSWR(`/api/restaurants`, fetcher);
+
+    if (error) {
+      console.error(error);
+    }
+    if (!restaurants) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div>
