@@ -1,4 +1,4 @@
-import clientPromise from "../lib/mongodb";
+// import clientPromise from "../lib/mongodb";
 
 
 import { useState } from "react";
@@ -9,29 +9,19 @@ import { Card, Table, Pagination } from "react-bootstrap";
 // import axios from "axios";
 // import Loading from "./Loading";
 
-export async function getServerSideProps(context) {
+
+export async function getServerSideProps() {
   try {
-    const page = context.query.page;
-    const client = await clientPromise;
-    const db = client.db("sample_restaurants");
-    
-    const restaurants = await db
-      .collection("restaurants")
-      .find({})
-      .limit(20)
-      .skip(parseInt(page, 10))
-      .toArray();
-      
-      return {
-        props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
-      };
-    } catch (e) {
-      console.error(e);
-      return {
-        props: { restaurants: [] }
-      };
-    }
+    let response = await fetch('http://localhost:3000/api/restaurants');
+    let restaurants = await response.json();
+
+    return {
+      props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
+    };
+  } catch (e) {
+    console.error(e);
   }
+}
 
   export default function Restaurants({ restaurants }) {
     const [page, setPage] = useState(0);
