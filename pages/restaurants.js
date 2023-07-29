@@ -7,69 +7,27 @@ import { useRouter } from "next/router";
 import { Card, Table, Pagination } from "react-bootstrap";
 // import { useHistory } from "react-router-dom";
 // import queryString from "query-string";
-// import axios from "axios";
-// import Loading from "./Loading";
 
-
-const fetcher = async (url) => {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
-
-// export async function getServerSideProps(context) {
-//   try {
-//     const page = context.query.page;
-//     const client = await clientPromise;
-//     const db = client.db("sample_restaurants");
-
-//     const restaurants = await db
-//       .collection("restaurants")
-//       .find({})
-//       .limit(20)
-//       .skip(parseInt(page, 10))
-//       .toArray();
-
-//       return {
-//         props: { restaurants: JSON.parse(JSON.stringify(restaurants)) },
-//       };
-//     } catch (e) {
-//       console.error(e);
-//       return {
-//         props: { restaurants: [] }
-//       };
-//     }
-//   }
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
   export default function Restaurants() {
-    const [page, setPage] = useState(0);
-    const router = useRouter();
-
-    // const [loading, setLoading] = useState(true);
-    const perPage = 20;
-
-    const refreshData = () => {
-      router.replace(router.asPath);
-    }
+    const [page, setPage] = useState(1);
 
     function previousPage() {
-      if (page > 0) {
-        setPage(page - 1);
-        refreshData();
-      }
+      setPage(page - 1);      
     }
   
     function nextPage() {
       setPage(page + 1);
-      refreshData();
     }
   
-    const { data: restaurants, error } = useSWR(`/api/restaurants`, fetcher);
+    const { data:restaurants, error, isLoading } = useSWR(`/api/restaurants?page=${page}`, fetcher);
 
     if (error) {
       console.error(error);
+      return <div>FAILED TO LOAD</div>;
     }
-    if (!restaurants) {
+    if (isLoading) {
       return <div>Loading...</div>;
     }
 
@@ -106,8 +64,8 @@ const fetcher = async (url) => {
           </tbody>
         </Table>
         <Pagination>
-          {page > 0 && <Pagination.Prev onClick={previousPage} />}
-          <Pagination.Item>{page + 1}</Pagination.Item>
+          {page > 1 && <Pagination.Prev onClick={previousPage} />}
+          <Pagination.Item>{page}</Pagination.Item>
           <Pagination.Next onClick={nextPage} />
         </Pagination>
       </div>
