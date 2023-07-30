@@ -15,10 +15,12 @@ import { useState } from "react";
 export default function Layout({ children }) {
   const [searchString, setSearchString] = useState("");
   const [activeKey, setActiveKey] = useState("/");
+  const router = useRouter();
 
   function handleSubmit(e) {
     e.preventDefault();
     setSearchString("");
+    router.push(`/restaurants?borough=${encodeURIComponent(searchString)}`);
   }
 
   function isActive(href) {

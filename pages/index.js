@@ -1,5 +1,4 @@
 import { Button, Container } from "react-bootstrap";
-
 import Link from "next/link";
 
 function App() {
