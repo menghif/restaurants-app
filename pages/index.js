@@ -1,14 +1,17 @@
 import { Button, Container } from "react-bootstrap";
 import Link from "next/link";
+import styles from "../styles.module.css";
+import Background from "../components/background";
 
 function App() {
   return (
-    <Container fluid className="new-york-background">
-      {/* <h1>Find your next favorite restaurant</h1> */}
+    <div className={styles.bgWrap}>
+      <h1>Find your next favorite restaurant</h1>
       <Link href="/restaurants">
         <Button variant="outline-secondary">Full List</Button>
       </Link>
-    </Container>
+      <Background />
+    </div>
   );
 }
 

@@ -6,7 +6,6 @@ import {
   FormControl,
   Nav,
   Navbar,
-  Row,
 } from "react-bootstrap";
 import { useRouter } from "next/router";
 
@@ -30,7 +29,6 @@ export default function Layout({ children }) {
 
   return (
     <div>
-      {/* Include shared UI here e.g. a header or sidebar */}
       <Navbar bg="secondary" variant="dark" expand="lg">
         <Container>
           <Navbar.Brand href="/">New York Restaurants</Navbar.Brand>
@@ -65,22 +63,6 @@ export default function Layout({ children }) {
       </Navbar>
 
       {children}
-
-      <footer>
-        <Container>
-          <Row>
-            <Col>
-              <p>test1</p>
-            </Col>
-            <Col>
-              <p>test2</p>
-            </Col>
-            <Col>
-              <p>test3</p>
-            </Col>
-          </Row>
-        </Container>
-      </footer>
     </div>
   );
 }

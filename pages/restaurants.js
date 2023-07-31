@@ -11,8 +11,6 @@ export default function Restaurants() {
   const router = useRouter();
   const { query } = router;
 
-  console.log(query.borough);
-
   function previousPage() {
     setPage(page - 1);
   }
