@@ -2,11 +2,6 @@ body {
   background-color: #eceff4;
 }
 
-nav {
-  box-shadow: 0 3px 5px lightgray;
-  margin-bottom: 40px;
-}
-
 .navbar-brand {
   color: whitesmoke;
   margin-right: 30px;
@@ -16,14 +11,16 @@ nav {
   font-family: sans-serif;
   text-shadow: 1.5px 1.5px 0.5px #138496;
 }
+.navbar-brand:hover {
+  color: whitesmoke;
+}
 
-/* @media (max-width: 575px) {
+.search-button-col {
+  padding-left: 0;
+}
+
+@media (max-width: 768px) {
   .search-box {
-    flex-direction: column;
     margin: 5px 0;
   }
-
-  .search-button {
-    margin-top: 10px;
-  }
-} */
+}
