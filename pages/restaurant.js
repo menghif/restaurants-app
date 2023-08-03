@@ -2,6 +2,7 @@ import { Card } from "react-bootstrap";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import Loading from "../components/loading";
 
 const MapWithNoSSR = dynamic(() => import("../components/map"), {
   ssr: false,
@@ -20,7 +21,7 @@ export default function Restaurant() {
   } = useSWR(`/api/restaurant?id=${query.id}`, fetcher);
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
 
   if (error) {

@@ -1,8 +1,9 @@
 import useSWR from "swr";
 
 import { useState } from "react";
-import { Card, Table, Pagination } from "react-bootstrap";
+import { Card, Table, Pagination, Container } from "react-bootstrap";
 import { useRouter } from "next/router";
+import Loading from "../components/loading";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -47,19 +48,21 @@ export default function Restaurants() {
     return <div>FAILED TO LOAD</div>;
   }
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
-    <div>
-      <Card bg="light" text="dark">
-        <Card.Body>
-          <Card.Title>Restaurant List</Card.Title>
-          <Card.Text>
-            Full list of restaurants. Optionally sorted by borough.
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <Container>
+      <div className="my-3">
+        <Card bg="light" text="dark">
+          <Card.Body>
+            <Card.Title>Restaurant List</Card.Title>
+            <Card.Text>
+              Full list of restaurants. Optionally sorted by borough.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </div>
       <Table striped bordered hover responsive="sm">
         <thead>
           <tr>
@@ -90,6 +93,6 @@ export default function Restaurants() {
         <Pagination.Item>{page}</Pagination.Item>
         <Pagination.Next onClick={nextPage} />
       </Pagination>
-    </div>
+    </Container>
   );
 }
