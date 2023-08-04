@@ -1,16 +1,31 @@
-import { Button, Container } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import Link from "next/link";
-import styles from "../styles.module.css";
 import Background from "../components/background";
 
 function App() {
   return (
-    <div className={styles.bgWrap}>
-      <h1>Find your next favorite restaurant</h1>
-      <Link href="/restaurants">
-        <Button variant="outline-secondary">Full List</Button>
-      </Link>
-      <Background />
+    <div className="d-flex justify-content-around">
+      <div
+        className="position-absolute d-flex align-self-center"
+        style={{ zIndex: 1 }}
+      >
+        <Card
+          className="p-4"
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.75)" }}
+        >
+          <h1>Find your next favorite restaurant</h1>
+          <a
+            class="btn btn-info btn-lg align-self-center"
+            href="/restaurants"
+            role="button"
+          >
+            Full List
+          </a>
+        </Card>
+      </div>
+      <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+        <Background />
+      </div>
     </div>
   );
 }
