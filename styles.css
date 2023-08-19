@@ -19,9 +19,40 @@ body {
   padding-left: 0;
 }
 
+.nav-link {
+  font-size: larger;
+}
+
+.map-container {
+  padding: 1rem 0;
+}
+
+.leaflet-container {
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+}
+
+.table-hover td {
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
+  .navbar-toggler {
+    background-color: hsl(210, 6%, 35%);
+  }
+
+  .nav-link {
+    padding: 12px 0;
+  }
+
   .search-box {
     margin: 5px 0;
+  }
+}
+
+@media (max-width: 315px) {
+  .search-button-col {
+    margin: 12px;
   }
 }
 

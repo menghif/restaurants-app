@@ -15,7 +15,7 @@ function App() {
         >
           <h1>Find your next favorite restaurant</h1>
           <a
-            class="btn btn-info btn-lg align-self-center"
+            className="btn btn-info btn-lg align-self-center"
             href="/restaurants"
             role="button"
           >

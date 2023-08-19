@@ -3,7 +3,7 @@ import background from "../public/images/florian-wehde-J6mySj3wntg-unsplash.jpg"
 
 export default function Background() {
   return (
-    <div>
+    <div className="h-100 position-relative">
       <Image
         src={background}
         placeholder="blur"

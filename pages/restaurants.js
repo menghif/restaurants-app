@@ -56,7 +56,7 @@ export default function Restaurants() {
       <div className="my-3">
         <Card bg="light" text="dark">
           <Card.Body>
-            <Card.Title>Restaurant List</Card.Title>
+            <Card.Title className="fs-3">Restaurant List</Card.Title>
             <Card.Text>
               Full list of restaurants. Optionally sorted by borough.
             </Card.Text>

@@ -1,4 +1,4 @@
-import { Card } from "react-bootstrap";
+import { Card, Container, Row, Col } from "react-bootstrap";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -28,7 +28,9 @@ export default function Restaurant() {
     return (
       <Card bg="light" text="dark">
         <Card.Body>
-          <Card.Title>Unable to find restaurant with ID: {id}</Card.Title>
+          <Card.Title className="fs-4">
+            Unable to find restaurant with ID: {id}
+          </Card.Title>
           <Card.Text>Please try again</Card.Text>
         </Card.Body>
       </Card>
@@ -42,28 +44,35 @@ export default function Restaurant() {
   const geoData = { lat: coord1, lng: coord0 };
 
   return (
-    <div>
-      <Card bg="light" text="dark">
-        <Card.Body>
-          <Card.Title className="title-card">{restaurant.name}</Card.Title>
-          <Card.Text>
-            {`${restaurant.address.building} ${restaurant.address.street}`}
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <br />
-      <MapWithNoSSR coords={geoData} />
-      <br />
-      <div display="block" className="grade-cards">
-        {grades.slice(0, 4).map((gr, index) => (
-          <Card key={index} bg="light" text="dark" className="grade-card">
-            <Card.Body>
-              <Card.Title>Grade: {gr.grade}</Card.Title>
-              <Card.Text>Completed: {gr.date.slice(0, 10)}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
+    <Container>
+      <div className="my-3">
+        <Card>
+          <Card.Body>
+            <Card.Title className="fs-2">{restaurant.name}</Card.Title>
+            <Card.Text>
+              {`${restaurant.address.building} ${restaurant.address.street}`}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <div className="map-container">
+          <MapWithNoSSR coords={geoData} />
+        </div>
+        <div display="block" className="grade-cards">
+          <p className="fs-5">Inspection:</p>
+          <Row>
+            {grades.slice(0, 4).map((gr, index) => (
+              <Col key={index} className="mb-2" md={3} lg={3}>
+                <Card bg="light" text="dark" className="grade-card">
+                  <Card.Body>
+                    <Card.Title>Grade: {gr.grade}</Card.Title>
+                    <Card.Text>Completed: {gr.date.slice(0, 10)}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
       </div>
-    </div>
+    </Container>
   );
 }
