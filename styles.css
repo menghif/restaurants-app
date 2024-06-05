@@ -2,6 +2,15 @@ body {
   background-color: #eceff4;
 }
 
+.btn-orange {
+  background-color: #ef9d55;
+  color: black;
+}
+
+.btn-orange:hover {
+  background-color: #f3b57c;
+}
+
 .navbar-brand {
   color: whitesmoke;
   margin-right: 30px;
@@ -9,7 +18,7 @@ body {
   font-weight: 700;
   font-size: 1.4em;
   font-family: sans-serif;
-  text-shadow: 1.5px 1.5px 0.5px #138496;
+  text-shadow: 1px 1px 0.5px #f3b57c;
 }
 .navbar-brand:hover {
   color: whitesmoke;

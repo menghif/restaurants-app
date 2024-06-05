@@ -35,7 +35,7 @@ export default function About() {
               <Button
                 className="mb-3"
                 href="https://github.com/menghif/restaurants-app"
-                variant="primary"
+                variant="orange"
               >
                 Source Code
               </Button>

@@ -14,13 +14,13 @@ function App() {
           style={{ backgroundColor: "rgba(255, 255, 255, 0.75)" }}
         >
           <h1>Find your next favorite restaurant</h1>
-          <a
-            className="btn btn-info btn-lg align-self-center"
+          <Button
+            className="btn btn-lg align-self-center"
             href="/restaurants"
-            role="button"
+            variant="orange"
           >
             Full List
-          </a>
+          </Button>
         </Card>
       </div>
       <div style={{ width: "100vw", height: "100vh", position: "relative" }}>

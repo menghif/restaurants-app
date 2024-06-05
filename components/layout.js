@@ -63,7 +63,7 @@ export default function Layout({ children }) {
                 <Col xs="auto" className="search-button-col">
                   <Button
                     type="submit"
-                    variant="info"
+                    variant="orange"
                     className="search-button"
                   >
                     Search
