@@ -1,55 +1,49 @@
 import useSWR from "swr";
 
 import { useState } from "react";
-import { Card, Table, Pagination, Container } from "react-bootstrap";
+import { Card, Table, Pagination, Container, Alert } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Loading from "../components/loading";
+import { formatAddress, capitalizeWords } from "../utils/formatters";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Restaurants() {
   const [page, setPage] = useState(1);
   const router = useRouter();
-  const { query } = router;
+  const { borough: rawBorough } = router.query;
 
-  function previousPage() {
-    setPage(page - 1);
-  }
+  const borough = rawBorough ? capitalizeWords(rawBorough) : "";
 
-  function nextPage() {
-    setPage(page + 1);
-  }
+  const { data, error, isLoading } = useSWR(
+    `/api/restaurants?page=${page}&borough=${borough}`,
+    fetcher
+  );
 
-  const handleRedirect = (id) => () => {
-    router.push(`/restaurant?id=${id}`);
+  const restaurants = data?.restaurants || [];
+  const totalPages = data?.totalPages || 1;
+
+  const RestaurantRow = ({ restaurant }) => {
+    if (!restaurant) return null;
+
+    return (
+      <tr
+        onClick={() =>
+          router.push(`/restaurant?id=${restaurant.restaurant_id}`)
+        }
+        style={{ cursor: "pointer" }}
+        role="button"
+        tabIndex={0}
+      >
+        <td>{restaurant?.name || "N/A"}</td>
+        <td>
+          {restaurant?.address ? formatAddress(restaurant.address) : "N/A"}
+        </td>
+        <td>{restaurant?.borough || "N/A"}</td>
+        <td>{restaurant?.cuisine || "N/A"}</td>
+      </tr>
+    );
   };
-
-  function capitalizeWords(str) {
-    const strArr = str.toLowerCase().split(" ");
-    const newArr = strArr.map((word) => {
-      return word[0].toUpperCase() + word.substr(1, word.length);
-    });
-    return newArr.join(" ");
-  }
-
-  let borough = query.borough || "";
-  if (borough) {
-    borough = capitalizeWords(borough);
-  }
-
-  const {
-    data: restaurants,
-    error,
-    isLoading,
-  } = useSWR(`/api/restaurants?page=${page}&borough=${borough}`, fetcher);
-
-  if (error) {
-    console.error(error);
-    return <div>FAILED TO LOAD</div>;
-  }
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Container>
@@ -59,40 +53,58 @@ export default function Restaurants() {
             <Card.Title className="fs-3">Restaurant List</Card.Title>
             <Card.Text>
               Full list of restaurants. Optionally sorted by borough.
+              {borough && ` Currently showing: ${borough}`}
             </Card.Text>
           </Card.Body>
         </Card>
       </div>
-      <Table striped bordered hover responsive="sm">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Borough</th>
-            <th>Cuisine</th>
-          </tr>
-        </thead>
-        <tbody>
-          {restaurants.map((restaurant) => (
-            <tr
-              key={restaurant._id}
-              onClick={handleRedirect(restaurant.restaurant_id)}
-            >
-              <td>{restaurant.name}</td>
-              <td>
-                {restaurant.address.building} {restaurant.address.street}
-              </td>
-              <td>{restaurant.borough}</td>
-              <td>{restaurant.cuisine}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Pagination>
-        {page > 1 && <Pagination.Prev onClick={previousPage} />}
-        <Pagination.Item>{page}</Pagination.Item>
-        <Pagination.Next onClick={nextPage} />
-      </Pagination>
+
+      {error && (
+        <Alert variant="danger">
+          Failed to load restaurants: {error.message}
+        </Alert>
+      )}
+
+      {isLoading ? (
+        <Loading />
+      ) : restaurants.length === 0 ? (
+        <Alert variant="info">
+          No restaurants found. {borough && "Try changing the borough filter."}
+        </Alert>
+      ) : (
+        <>
+          <Table striped bordered hover responsive="sm">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Borough</th>
+                <th>Cuisine</th>
+              </tr>
+            </thead>
+            <tbody>
+              {restaurants.map((restaurant) => (
+                <RestaurantRow
+                  key={restaurant?._id || Math.random()}
+                  restaurant={restaurant}
+                />
+              ))}
+            </tbody>
+          </Table>
+
+          <Pagination className="justify-content-center">
+            <Pagination.Prev
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page <= 1}
+            />
+            <Pagination.Item active>{page}</Pagination.Item>
+            <Pagination.Next
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= totalPages}
+            />
+          </Pagination>
+        </>
+      )}
     </Container>
   );
 }

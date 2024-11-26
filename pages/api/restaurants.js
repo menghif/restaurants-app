@@ -5,9 +5,7 @@ export default async (req, res) => {
     const client = await clientPromise;
     const db = client.db("sample_restaurants");
 
-    const { page, borough } = req.query; // Extract the 'page' parameter from the query
-
-    // Determine the number of items to skip based on the page number
+    const { page, borough } = req.query;
     const itemsPerPage = 10;
     const skip = (parseInt(page) - 1) * itemsPerPage;
 
@@ -16,16 +14,23 @@ export default async (req, res) => {
       query = { borough: borough };
     }
 
+    // Get total count for pagination
+    const totalCount = await db.collection("restaurants").countDocuments(query);
+
     const restaurants = await db
       .collection("restaurants")
       .find(query)
-      .skip(skip) // Skip the appropriate number of items based on the page
+      .skip(skip)
       .limit(itemsPerPage)
       .toArray();
 
-    res.json(restaurants);
+    res.json({
+      restaurants,
+      totalCount,
+      totalPages: Math.ceil(totalCount / itemsPerPage),
+    });
   } catch (e) {
     console.error(e);
-    throw new Error(e).message;
+    res.status(500).json({ error: e.message });
   }
 };

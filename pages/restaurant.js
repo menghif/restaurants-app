@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Loading from "../components/loading";
+import { formatAddress } from "../utils/formatters";
 
 const MapWithNoSSR = dynamic(() => import("../components/map"), {
   ssr: false,
@@ -12,65 +13,73 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Restaurant() {
   const router = useRouter();
-  const { query } = router;
+  const { id } = router.query;
 
   const {
     data: restaurant,
     error,
     isLoading,
-  } = useSWR(`/api/restaurant?id=${query.id}`, fetcher);
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  } = useSWR(id ? `/api/restaurant?id=${id}` : null, fetcher);
 
   if (error) {
     return (
-      <Card bg="light" text="dark">
-        <Card.Body>
-          <Card.Title className="fs-4">
-            Unable to find restaurant with ID: {id}
-          </Card.Title>
-          <Card.Text>Please try again</Card.Text>
-        </Card.Body>
-      </Card>
+      <Container className="my-3">
+        <Card bg="danger" text="white">
+          <Card.Body>
+            <Card.Title>Error Loading Restaurant</Card.Title>
+            <Card.Text>
+              Unable to find restaurant with ID: {id}. Please try again.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Container>
     );
   }
 
-  const coord0 = restaurant.address.coord[0];
-  const coord1 = restaurant.address.coord[1];
-  const grades = restaurant.grades;
+  if (isLoading || !restaurant) {
+    return <Loading />;
+  }
 
-  const geoData = { lat: coord1, lng: coord0 };
+  const { address, grades, name } = restaurant;
+  const geoData = {
+    lat: address.coord[1],
+    lng: address.coord[0],
+  };
 
   return (
     <Container>
       <div className="my-3">
         <Card>
           <Card.Body>
-            <Card.Title className="fs-2">{restaurant.name}</Card.Title>
-            <Card.Text>
-              {`${restaurant.address.building} ${restaurant.address.street}`}
-            </Card.Text>
+            <Card.Title className="fs-2">{name}</Card.Title>
+            <Card.Text>{formatAddress(address)}</Card.Text>
           </Card.Body>
         </Card>
         <div className="map-container">
           <MapWithNoSSR coords={geoData} />
         </div>
-        <div display="block" className="grade-cards">
-          <p className="fs-5">Inspection:</p>
-          <Row>
-            {grades.slice(0, 4).map((gr, index) => (
-              <Col key={index} className="mb-2" md={3} lg={3}>
-                <Card bg="light" text="dark" className="grade-card">
-                  <Card.Body>
-                    <Card.Title>Grade: {gr.grade}</Card.Title>
-                    <Card.Text>Completed: {gr.date.slice(0, 10)}</Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+        <div className="grade-cards">
+          {grades.length > 0 ? (
+            <>
+              <h2 className="fs-5">Recent Inspections</h2>
+              <Row>
+                {grades.slice(0, 4).map((grade, index) => (
+                  <Col key={index} className="mb-2" md={3}>
+                    <Card className="h-100 grade-card">
+                      <Card.Body>
+                        <Card.Title>Grade: {grade.grade}</Card.Title>
+                        <Card.Text>
+                          {new Date(grade.date).toLocaleDateString()}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </>
+          ) : (
+            <p>No inspection grades available</p>
+          )}
         </div>
       </div>
     </Container>
