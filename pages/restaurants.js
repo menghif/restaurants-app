@@ -1,6 +1,5 @@
 import useSWR from "swr";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, Table, Pagination, Container, Alert } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Loading from "../components/loading";
@@ -14,6 +13,10 @@ export default function Restaurants() {
   const { borough: rawBorough } = router.query;
 
   const borough = rawBorough ? capitalizeWords(rawBorough) : "";
+
+  useEffect(() => {
+    setPage(1);
+  }, [borough]);
 
   const { data, error, isLoading } = useSWR(
     `/api/restaurants?page=${page}&borough=${borough}`,
