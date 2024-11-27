@@ -48,7 +48,7 @@ export default function Restaurant() {
 
   return (
     <Container>
-      <div className="my-3">
+      <div className="my-4">
         <Card>
           <Card.Body>
             <Card.Title className="fs-2">{name}</Card.Title>
@@ -61,7 +61,7 @@ export default function Restaurant() {
         <div className="grade-cards">
           {grades.length > 0 ? (
             <>
-              <h2 className="fs-5">Recent Inspections</h2>
+              <h2 className="fs-5 my-3">Recent Inspections</h2>
               <Row>
                 {grades.slice(0, 4).map((grade, index) => (
                   <Col key={index} className="mb-2" md={3}>

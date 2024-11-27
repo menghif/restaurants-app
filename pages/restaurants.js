@@ -50,7 +50,7 @@ export default function Restaurants() {
 
   return (
     <Container>
-      <div className="my-3">
+      <div className="my-4">
         <Card bg="light" text="dark">
           <Card.Body>
             <Card.Title className="fs-3">Restaurant List</Card.Title>
