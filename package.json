@@ -6,20 +6,20 @@
     "start": "next start"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.8",
     "leaflet": "^1.9.4",
-    "mongodb": "^4.17.2",
-    "next": "^14.2.6",
-    "react": "^18.3.1",
-    "react-bootstrap": "^2.10.4",
-    "react-dom": "^18.3.1",
-    "react-leaflet": "^4.2.1",
-    "sharp": "^0.33.5",
-    "swr": "^2.2.5"
+    "mongodb": "^7.5.0",
+    "next": "^16.3.2",
+    "react": "^19.2.8",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0",
+    "sharp": "^0.35.3",
+    "swr": "^2.5.1"
   },
   "devDependencies": {
-    "@types/node": "18.7.5",
-    "@types/react": "^16.14.60",
-    "typescript": "4.6.3"
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "typescript": "^7.0.2"
   }
 }
