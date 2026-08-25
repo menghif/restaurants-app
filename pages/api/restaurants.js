@@ -6,7 +6,7 @@ export default async (req, res) => {
     const db = client.db("sample_restaurants");
 
     const { page, borough } = req.query;
-    const itemsPerPage = 10;
+    const itemsPerPage = 15;
     const skip = (parseInt(page) - 1) * itemsPerPage;
 
     let query = {};
