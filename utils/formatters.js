@@ -9,3 +9,8 @@ export const capitalizeWords = (str) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
+
+export const truncate = (str, maxLength) => {
+  if (!str) return "";
+  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};

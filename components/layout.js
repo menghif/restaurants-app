@@ -11,10 +11,30 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+function BrandIcon() {
+  return (
+    <svg
+      className="navbar-brand-icon"
+      width="22"
+      height="22"
+      viewBox="0 0 4 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M7 2v9" />
+      <path d="M4 2v5a3 3 0 0 0 6 0V2" />
+      <path d="M7 11v11" />
+    </svg>
+  );
+}
+
 export default function Layout({ children }) {
   const [searchString, setSearchString] = useState("");
-  const [activeKey, setActiveKey] = useState("/");
   const router = useRouter();
+  const { pathname } = router;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,30 +42,27 @@ export default function Layout({ children }) {
     router.push(`/restaurants?borough=${encodeURIComponent(searchString)}`);
   }
 
-  function isActive(href) {
-    const { pathname } = useRouter();
-    return pathname === href;
-  }
-
   return (
     <>
-      <Navbar bg="secondary" data-bs-theme="dark" expand="md">
+      <Navbar className="app-navbar" data-bs-theme="dark" expand="md">
         <Container fluid xs="auto">
-          <Navbar.Brand href="/">New York Restaurants</Navbar.Brand>
+          <Navbar.Brand href="/">
+            <BrandIcon />
+            New York Restaurants
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
             className="justify-content-between"
           >
-            <Nav
-              className="me-auto"
-              activeKey={activeKey}
-              onSelect={(selectedKey) => setActiveKey(selectedKey)}
-            >
-              <Nav.Link href="/restaurants" active={isActive("/restaurants")}>
+            <Nav className="me-auto">
+              <Nav.Link
+                href="/restaurants"
+                active={pathname === "/restaurants"}
+              >
                 Full List
               </Nav.Link>
-              <Nav.Link href="/about" active={isActive("/about")}>
+              <Nav.Link href="/about" active={pathname === "/about"}>
                 About
               </Nav.Link>
             </Nav>

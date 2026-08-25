@@ -1,9 +1,16 @@
 import useSWR from "swr";
 import { useState, useEffect } from "react";
-import { Card, Table, Pagination, Container, Alert } from "react-bootstrap";
+import {
+  Card,
+  Table,
+  Pagination,
+  Container,
+  Alert,
+  Badge,
+} from "react-bootstrap";
 import { useRouter } from "next/router";
 import Loading from "../components/loading";
-import { formatAddress, capitalizeWords } from "../utils/formatters";
+import { formatAddress, capitalizeWords, truncate } from "../utils/formatters";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -42,14 +49,30 @@ export default function Restaurants() {
         <td>
           {restaurant?.address ? formatAddress(restaurant.address) : "N/A"}
         </td>
-        <td>{restaurant?.borough || "N/A"}</td>
-        <td>{restaurant?.cuisine || "N/A"}</td>
+        <td>
+          {restaurant?.borough ? (
+            <Badge bg="light" text="dark" className="border">
+              {restaurant.borough}
+            </Badge>
+          ) : (
+            "N/A"
+          )}
+        </td>
+        <td>
+          {restaurant?.cuisine ? (
+            <Badge bg="orange" text="dark">
+              {truncate(restaurant.cuisine, 20)}
+            </Badge>
+          ) : (
+            "N/A"
+          )}
+        </td>
       </tr>
     );
   };
 
   return (
-    <Container>
+    <Container className="container">
       <div className="my-4">
         <Card bg="light" text="dark">
           <Card.Body>
@@ -76,7 +99,13 @@ export default function Restaurants() {
         </Alert>
       ) : (
         <>
-          <Table striped bordered hover responsive="sm">
+          <Table
+            striped
+            bordered
+            hover
+            responsive="sm"
+            className="restaurant-table"
+          >
             <thead>
               <tr>
                 <th>Name</th>
@@ -95,17 +124,22 @@ export default function Restaurants() {
             </tbody>
           </Table>
 
-          <Pagination className="justify-content-center">
-            <Pagination.Prev
-              onClick={() => setPage((p) => p - 1)}
-              disabled={page <= 1}
-            />
-            <Pagination.Item active>{page}</Pagination.Item>
-            <Pagination.Next
-              onClick={() => setPage((p) => p + 1)}
-              disabled={page >= totalPages}
-            />
-          </Pagination>
+          <div className="d-flex flex-column align-items-center gap-2">
+            <Pagination className="justify-content-center mb-0">
+              <Pagination.Prev
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page <= 1}
+              />
+              <Pagination.Item active>{page}</Pagination.Item>
+              <Pagination.Next
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page >= totalPages}
+              />
+            </Pagination>
+            <span className="pagination-summary">
+              Page {page} of {totalPages}
+            </span>
+          </div>
         </>
       )}
     </Container>
